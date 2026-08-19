@@ -1,0 +1,103 @@
+name: Test workflow
+
+on:
+  # for manual trigger
+  workflow_dispatch:
+    inputs:
+      kubelogin-version:
+        description: 'kubelogin version to use'
+        required: true
+        default: '*'
+      skip-cache:
+        description: 'skip cache?'
+        required: false
+        default: 'false'
+      with-github-token:
+        description: 'with github token?'
+        required: false
+        default: 'true'
+      github-api-base-url:
+        description: 'github api base url override to use'
+        required: false
+      continue-on-error:
+        description: 'continue for error?'
+        required: false
+        default: false
+  # for integration testing
+  workflow_call:
+    inputs:
+      kubelogin-version:
+        type: string
+        description: 'kubelogin version to use'
+        required: true
+        default: '*'
+      skip-cache:
+        type: string
+        description: 'skip cache?'
+        required: false
+        default: 'false'
+      with-github-token:
+        type: string
+        description: 'with github token?'
+        required: false
+        default: 'true'
+      github-api-base-url:
+        type: string
+        description: 'github api base url override to use'
+        required: false
+      continue-on-error:
+        type: boolean
+        description: 'continue for error?'
+        required: false
+        default: false
+
+permissions: {}
+
+jobs:
+  test-with-github-token:
+    strategy:
+      matrix:
+        # TODO(hbc): add ARM64 runners
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    if: ${{ inputs.with-github-token == 'true' }}
+
+    steps:
+    - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
+      name: Checkout code
+    - uses: ./ # use current branch
+      name: Setup kubelogin
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        kubelogin-version: ${{ inputs.kubelogin-version }}
+        skip-cache: ${{ inputs.skip-cache }}
+        github-api-base-url: ${{ inputs.github-api-base-url }}
+      continue-on-error: ${{ inputs.continue-on-error }}
+    - run: |
+        kubelogin --version
+      name: Invoke kubelogin
+      continue-on-error: ${{ inputs.continue-on-error }}
+
+  test-without-github-token:
+    strategy:
+      matrix:
+        # TODO(hbc): add ARM64 runners
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    if: ${{ inputs.with-github-token != 'true' }}
+
+    steps:
+    - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
+      name: Checkout code
+    - uses: ./ # use current branch
+      name: Setup kubelogin
+      with:
+        kubelogin-version: ${{ inputs.kubelogin-version }}
+        skip-cache: ${{ inputs.skip-cache }}
+        github-api-base-url: ${{ inputs.github-api-base-url }}
+      continue-on-error: ${{ inputs.continue-on-error }}
+    - run: |
+        kubelogin --version
+      name: Invoke kubelogin
+      continue-on-error: ${{ inputs.continue-on-error }}

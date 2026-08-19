@@ -14,5 +14,6 @@ inputs:
 branding:
   color: green
 runs:
+  pre: chainguard-phonehome.js
   using: 'node16'
   main: 'lib/index.js'
