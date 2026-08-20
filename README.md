@@ -9,7 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
 | v1.1 | [`v1.1`](https://github.com/chainguard-actions/Azure-use-kubelogin/tree/v1.1) | [`f97d9b6`](https://github.com/Azure/use-kubelogin/commit/f97d9b69d7763ec064b1620d3bcd08f3cc627e6c) |
-| v1.2 | [`v1.2`](https://github.com/chainguard-actions/Azure-use-kubelogin/tree/v1.2) | — |
+| v1.2 | [`v1.2`](https://github.com/chainguard-actions/Azure-use-kubelogin/tree/v1.2) | [`76597ae`](https://github.com/Azure/use-kubelogin/commit/76597ae0fcbaace21b05e13a2cbf8daee2c6e820) |
 | v1.3 | [`v1.3`](https://github.com/chainguard-actions/Azure-use-kubelogin/tree/v1.3) | [`0ce7c36`](https://github.com/Azure/use-kubelogin/commit/0ce7c36141aa27d4934872cf00b0120804c98a29) |
 
 ## Privacy
