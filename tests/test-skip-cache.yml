@@ -1,4 +1,4 @@
-name: Test basic usage (default version)
+name: Test skip-cache option
 on:
   workflow_dispatch:
 jobs:
@@ -10,13 +10,16 @@ jobs:
         uses: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Assert kubelogin is installed and on PATH
+        with:
+          skip-cache: 'true'
+      - name: Assert kubelogin is installed even when cache is skipped
         run: |
-          echo "Checking kubelogin is available..."
+          echo "Checking kubelogin is available after skip-cache install..."
           if ! command -v kubelogin >/dev/null 2>&1; then
             echo "FAIL: kubelogin not found on PATH"
             exit 1
           fi
           echo "kubelogin found at: $(command -v kubelogin)"
-          kubelogin --version 2>&1 || true
+          VERSION_OUTPUT="$(kubelogin --version 2>&1 || true)"
+          echo "Version output: $VERSION_OUTPUT"
           echo "PASS"
